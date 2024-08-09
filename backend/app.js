@@ -11,7 +11,9 @@ app.use(cors({
   origin:"http://localhost:3000",
   credentials:true
 }));
-app.use("/",express.static("uploads"));
+// Static folder for serving cover pictures
+app.use('/uploads', express.static('uploads'));
+
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 //config
 if (process.env.NODE_ENV !== "PRODUCTION") {
@@ -20,11 +22,12 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
   });
 }
 // import routes
-const user = require("./routes/user");
- 
+const userRoutes = require('./routes/user');
+const bookRoutes = require('./routes/bookRoute');
+// User routes
+app.use('/api/users', userRoutes);
 
-app.use("/api/v2/user", user);
-
+app.use('/api/books', bookRoutes);
 // it's for ErrorHandling
 app.use(ErrorHandler);
 

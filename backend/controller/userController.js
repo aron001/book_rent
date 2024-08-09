@@ -1,106 +1,108 @@
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcryptjs')
-const asyncHandler = require('express-async-handler')
-const User = require('../model/user')
+// controllers/userController.js
 
+const User = require('../model/user');
+const jwt = require('jsonwebtoken');
+const config = require('../config/config');
 
-// @desc    Register new user
-// @route   POST /api/users
-// @access  Public
+// Generate JWT token
+const generateToken = (user) => {
+  return jwt.sign(
+    {
+      id: user._id,
+      role: user.role,
+    },
+    config.jwtSecret,
+    { expiresIn: '1h' }
+  );
+};
 
-const registerUser = asyncHandler(async (req, res) => {
-  const {  email, password , phone, location} = req.body
+// Register a new user
+const registerUser = async (req, res) => {
+  try {
+    const { email, password, role } = req.body;
 
-  if (!email || !password) {
-    res.status(400)
-    throw new Error('Please add all fields')
-  }
+    // Check if the user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email already exists' });
+    }
 
-  // Check if user exists
-  const userExists = await User.findOne({ email })
+    // Create new user
+    const newUser = new User({
+      email,
+      password,
+      role, // Set user role (either 'Admin' or 'BookOwner')
+    });
 
-  if (userExists) {
-    res.status(400)
-    throw new Error('User already exists')
-  }
+    await newUser.save();
 
-  // Hash password
-  const salt = await bcrypt.genSalt(10)
-  const hashedPassword = await bcrypt.hash(password, salt)
+    // Generate JWT token
+    const token = generateToken(newUser);
 
-  // Create user
-  const user = await User.create({
-
-    email,
-    phone,
-    location,
-    password: hashedPassword,
-  })
-
-  if (user) {
     res.status(201).json({
-      _id: user.id,
-      name: user.role,
-      email: user.email,
-      token: generateToken(user._id),
-    })
-  } else {
-    res.status(400)
-    throw new Error('Invalid user data')
+      message: 'User registered successfully',
+      user: {
+        id: newUser._id,
+        email: newUser.email,
+        role: newUser.role,
+      },
+      token,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
-})
+};
 
+// Login user
+const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-  
+    // Find the user by username
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid username or password' });
+    }
 
+    // Check if password matches
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid username or password' });
+    }
 
-// @desc    Authenticate a user
-// @route   POST /api/users/login
-// @access  Public
-const loginUser = asyncHandler(async (req, res) => {
-  const { email, password } = req.body
+    // Generate JWT token
+    const token = generateToken(user);
 
-  // Check for user email
-  const user = await User.findOne({ email })
-
-  if (user && (await bcrypt.compare(password, user.password))) {
-    res.json({
-      _id: user.id,
-    
-      email: user.email,
-      role:user.role,
-      token: generateToken(user._id),
-    })
-  } else {
-    res.status(400)
-    throw new Error('Invalid credentials')
+    res.status(200).json({
+      message: 'User logged in successfully',
+      user: {
+        id: user._id,
+        email: user.email,
+        role: user.role,
+      },
+      token,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
-})
+};
 
+// Get current user profile
+const getProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Generate JWT
-const generateToken = (id) => {
-  return jwt.sign({ id }, "abcd123", {
-    expiresIn: '3d',
-  })
-}
+    res.status(200).json({ user });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 module.exports = {
   registerUser,
   loginUser,
-  
-
-}
+  getProfile,
+};
