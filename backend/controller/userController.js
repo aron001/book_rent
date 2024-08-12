@@ -19,7 +19,7 @@ const generateToken = (user) => {
 // Register a new user
 const registerUser = async (req, res) => {
   try {
-    const { email, password, role } = req.body;
+    const { email, password, role ,phone} = req.body;
 
     // Check if the user already exists
     const existingUser = await User.findOne({ email });
@@ -31,7 +31,8 @@ const registerUser = async (req, res) => {
     const newUser = new User({
       email,
       password,
-      role, // Set user role (either 'Admin' or 'BookOwner')
+      role, 
+      phone,// Set user role (either 'Admin' or 'BookOwner')
     });
 
     await newUser.save();

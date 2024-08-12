@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { AiFillEye, AiFillDelete, AiFillHome, AiOutlineAppstore, AiFillSetting, AiFillBell, AiFillBook, AiOutlineLogin, AiOutlineLogout } from 'react-icons/ai';
+import { AiFillEye, AiFillDelete } from 'react-icons/ai';
+import Sidebar from './sideBar';
 
 const Owners = () => {
   // State to track approval status of each book
@@ -15,34 +16,7 @@ const Owners = () => {
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar Menu */}
-      <div className="w-64 bg-blue-950 text-white flex flex-col p-6 rounded-r-lg mb-4 ml-4 mt-6 justify-between">
-        <nav className="flex flex-col space-y-2">
-          <button className="flex items-center py-2 px-4 rounded-lg hover:bg-blue-700 transition">
-            <AiFillHome size={15} className="mr-2" /> Dashboard
-          </button>
-          <button className="flex items-center py-2 px-4 rounded-lg hover:bg-blue-700 transition">
-            <AiOutlineAppstore size={15} className="mr-2" /> Other
-          </button>
-          <button className="flex items-center py-2 px-4 rounded-lg hover:bg-blue-700 transition">
-            <AiFillBook size={15} className="mr-2" /> Owners
-          </button>
-          <button className="flex items-center py-2 px-4 rounded-lg hover:bg-blue-700 transition">
-            <AiFillBook size={15} className="mr-2" /> Book
-          </button>
-          <button className="flex items-center py-2 px-4 rounded-lg hover:bg-blue-700 transition">
-            <AiFillSetting size={15} className="mr-2" /> Settings
-          </button>
-          <button className="flex items-center py-2 px-4 rounded-lg hover:bg-blue-700 transition">
-            <AiFillBell size={15} className="mr-2" /> Notifications
-          </button>
-          <button className="flex items-center py-2 px-4 rounded-lg hover:bg-blue-700 transition">
-            <AiOutlineLogin size={15} className="mr-2" /> Log in as Bookowner
-          </button>
-        </nav>
-        <div className="flex items-center py-2 px-4 rounded-lg hover:bg-blue-700 transition">
-          <AiOutlineLogout size={15} className="mr-2" /> Logout
-        </div>
-      </div>
+      <Sidebar />
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col p-4 space-y-4">
@@ -63,9 +37,9 @@ const Owners = () => {
                 <thead>
                   <tr className="text-left">
                     <th className="py-2 px-4 font-semibold text-sm text-gray-700">No</th>
-                    <th className="py-2 px-4 font-semibold text-sm text-gray-700">Author</th>
                     <th className="py-2 px-4 font-semibold text-sm text-gray-700">Owner</th>
-                    <th className="py-2 px-4 font-semibold text-sm text-gray-700">Category</th>
+                    <th className="py-2 px-4 font-semibold text-sm text-gray-700">Upload</th>
+                    <th className="py-2 px-4 font-semibold text-sm text-gray-700">Location</th>
                     <th className="py-2 px-4 font-semibold text-sm text-gray-700">Book Name</th>
                     <th className="py-2 px-4 font-semibold text-sm text-gray-700">Status</th>
                     <th className="py-2 px-4 font-semibold text-sm text-gray-700">Action</th>
@@ -73,126 +47,46 @@ const Owners = () => {
                 </thead>
                 <tbody className="bg-white">
                   {/* Example Rows */}
-                  <tr className="border-t border-b hover:bg-gray-50 transition">
-                    <td className="py-2 px-4 text-gray-600">1</td>
-                    <td className="py-2 px-4 text-gray-600">J.K. Rowling</td>
-                    <td className="py-2 px-4 text-gray-600">Library A</td>
-                    <td className="py-2 px-4 text-gray-600">Fantasy</td>
-                    <td className="py-2 px-4 text-gray-600">Harry Potter</td>
-                    <td className="py-2 px-4 text-gray-600">Available</td>
-                    <td className="py-2 px-4 text-gray-600 flex space-x-2">
-                      <button className="text-blue-600 hover:text-blue-800 transition">
-                        <AiFillEye size={20} />
-                      </button>
-                      <button className="text-red-600 hover:text-red-800 transition">
-                        <AiFillDelete size={20} />
-                      </button>
-                      <button
-                        onClick={() => toggleApproval(0)}
-                        className={`py-1 px-3 rounded ${
-                          approved[0] ? 'bg-silver-500 text-white' : 'bg-blue-500 text-white'
-                        } hover:bg-gray-700 transition`}
-                      >
-                        Approve
-                      </button>
-                    </td>
-                  </tr>
-                  <tr className="border-b hover:bg-gray-50 transition">
-                    <td className="py-2 px-4 text-gray-600">2</td>
-                    <td className="py-2 px-4 text-gray-600">George R.R. Martin</td>
-                    <td className="py-2 px-4 text-gray-600">Library B</td>
-                    <td className="py-2 px-4 text-gray-600">Fantasy</td>
-                    <td className="py-2 px-4 text-gray-600">A Song of Ice and Fire</td>
-                    <td className="py-2 px-4 text-gray-600">Checked Out</td>
-                    <td className="py-2 px-4 text-gray-600 flex space-x-2">
-                      <button className="text-blue-600 hover:text-blue-800 transition">
-                        <AiFillEye size={20} />
-                      </button>
-                      <button className="text-red-600 hover:text-red-800 transition">
-                        <AiFillDelete size={20} />
-                      </button>
-                      <button
-                        onClick={() => toggleApproval(1)}
-                        className={`py-1 px-3 rounded ${
-                          approved[1] ? 'bg-silver-500 text-white' : 'bg-blue-500 text-white'
-                        } hover:bg-gray-700 transition`}
-                      >
-                        Approve
-                      </button>
-                    </td>
-                  </tr>
-                  <tr className="border-b hover:bg-gray-50 transition">
-                    <td className="py-2 px-4 text-gray-600">3</td>
-                    <td className="py-2 px-4 text-gray-600">J.R.R. Tolkien</td>
-                    <td className="py-2 px-4 text-gray-600">Library C</td>
-                    <td className="py-2 px-4 text-gray-600">Fantasy</td>
-                    <td className="py-2 px-4 text-gray-600">The Hobbit</td>
-                    <td className="py-2 px-4 text-gray-600">Available</td>
-                    <td className="py-2 px-4 text-gray-600 flex space-x-2">
-                      <button className="text-blue-600 hover:text-blue-800 transition">
-                        <AiFillEye size={20} />
-                      </button>
-                      <button className="text-red-600 hover:text-red-800 transition">
-                        <AiFillDelete size={20} />
-                      </button>
-                      <button
-                        onClick={() => toggleApproval(2)}
-                        className={`py-1 px-3 rounded ${
-                          approved[2] ? 'bg-silver-500 text-white' : 'bg-blue-500 text-white'
-                        } hover:bg-gray-700 transition`}
-                      >
-                        Approve
-                      </button>
-                    </td>
-                  </tr>
-                  <tr className="border-b hover:bg-gray-50 transition">
-                    <td className="py-2 px-4 text-gray-600">4</td>
-                    <td className="py-2 px-4 text-gray-600">Agatha Christie</td>
-                    <td className="py-2 px-4 text-gray-600">Library A</td>
-                    <td className="py-2 px-4 text-gray-600">Mystery</td>
-                    <td className="py-2 px-4 text-gray-600">Murder on the Orient Express</td>
-                    <td className="py-2 px-4 text-gray-600">Checked Out</td>
-                    <td className="py-2 px-4 text-gray-600 flex space-x-2">
-                      <button className="text-blue-600 hover:text-blue-800 transition">
-                        <AiFillEye size={20} />
-                      </button>
-                      <button className="text-red-600 hover:text-red-800 transition">
-                        <AiFillDelete size={20} />
-                      </button>
-                      <button
-                        onClick={() => toggleApproval(3)}
-                        className={`py-1 px-3 rounded ${
-                          approved[3] ? 'bg-silver-500 text-white' : 'bg-blue-500 text-white'
-                        } hover:bg-gray-700 transition`}
-                      >
-                        Approve
-                      </button>
-                    </td>
-                  </tr>
-                  <tr className="hover:bg-gray-50 transition">
-                    <td className="py-2 px-4 text-gray-600">5</td>
-                    <td className="py-2 px-4 text-gray-600">Harper Lee</td>
-                    <td className="py-2 px-4 text-gray-600">Library B</td>
-                    <td className="py-2 px-4 text-gray-600">Classic</td>
-                    <td className="py-2 px-4 text-gray-600">To Kill a Mockingbird</td>
-                    <td className="py-2 px-4 text-gray-600">Available</td>
-                    <td className="py-2 px-4 text-gray-600 flex space-x-2">
-                      <button className="text-blue-600 hover:text-blue-800 transition">
-                        <AiFillEye size={20} />
-                      </button>
-                      <button className="text-red-600 hover:text-red-800 transition">
-                        <AiFillDelete size={20} />
-                      </button>
-                      <button
-                        onClick={() => toggleApproval(4)}
-                        className={`py-1 px-3 rounded ${
-                          approved[4] ? 'bg-silver-500 text-white' : 'bg-blue-500 text-white'
-                        } hover:bg-gray-700 transition`}
-                      >
-                        Approve
-                      </button>
-                    </td>
-                  </tr>
+                  {['J.K. Rowling', 'George R.R. Martin', 'J.R.R. Tolkien', 'Agatha Christie', 'Harper Lee'].map((owner, index) => (
+                    <tr key={index} className="border-b hover:bg-gray-50 transition">
+                      <td className="py-2 px-4 text-gray-600">{index + 1}</td>
+                      <td className="py-2 px-4 text-gray-600">{owner}</td>
+                      <td className="py-2 px-4 text-gray-600">Library {String.fromCharCode(65 + index % 3)}</td>
+                      <td className="py-2 px-4 text-gray-600">Fantasy</td>
+                      <td className="py-2 px-4 text-gray-600">Book Title {index + 1}</td>
+                      <td className="py-2 px-4 text-gray-600">
+                        <div className="flex items-center">
+                          <span className={`text-green-600 font-semibold mr-2 ${approved[index] ? 'opacity-100' : 'opacity-50'}`}>
+                            {approved[index] ? 'Approved' : 'Pending'}
+                          </span>
+                          <div
+                            className={`relative inline-block w-20 h-3 rounded-full border border-light-green shadow-md ${approved[index] ? 'bg-green-400' : 'bg-gray-200'}`}
+                            onClick={() => toggleApproval(index)}
+                          >
+                            <div
+                              className={`absolute w-4 h-4 bg-green-500 rounded-full shadow transform ${approved[index] ? 'translate-x-16' : 'translate-x-0'} transition-transform duration-300`}
+                            />
+                          </div>
+                        </div>
+                      </td>
+                      <td className="py-2 px-4 text-gray-600 flex space-x-2">
+                        <button className="text-blue-600 hover:text-blue-800 transition">
+                          <AiFillEye size={20} />
+                        </button>
+                        <button className="text-red-600 hover:text-red-800 transition">
+                          <AiFillDelete size={20} />
+                        </button>
+                        <button
+                          onClick={() => toggleApproval(index)}
+                          className={`py-1 px-3 rounded ${
+                            approved[index] ? 'bg-green-500 text-white' : 'bg-blue-500 text-white'
+                          } hover:bg-gray-700 transition`}
+                        >
+                          {approved[index] ? 'Disapprove' : 'Approve'}
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

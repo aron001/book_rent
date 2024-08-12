@@ -1,16 +1,19 @@
+// src/component/Signup.js
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { signupUser } from '../store/actions/authActions';
 
 const Signup = () => {
-  // State variables for form fields
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(null); // Add local state for error handling
+  const dispatch = useDispatch();
+  const signupError = useSelector(state => state.auth.error);
 
-  // Handle form submission
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (password !== confirmPassword) {
@@ -23,11 +26,19 @@ const Signup = () => {
       return;
     }
 
-    // Reset error message and proceed with form submission
-    setError('');
-    console.log('Form submitted', { email, phone, password });
-    // Handle form submission logic, such as sending data to a server
+    // Clear previous error
+    setError(null);
+
+    // Dispatch signup action
+    dispatch(signupUser(email, phone, password, 'BookOwner'));
   };
+
+  // Show signup errors from Redux store
+  React.useEffect(() => {
+    if (signupError) {
+      setError(signupError);
+    }
+  }, [signupError]);
 
   return (
     <div className="flex h-screen">

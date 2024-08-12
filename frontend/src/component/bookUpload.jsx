@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios'; // Import axios
 import {
   AiFillHome,
   AiOutlineAppstore,
@@ -19,12 +20,12 @@ const BookUploads = () => {
     name: '',
     author: '',
     category: '',
+    coverPicture: null, // Add coverPicture state
   });
 
   const books = [
     "book 1",
     'book 2',
-  
   ];
 
   const filteredBooks = books.filter((book) =>
@@ -43,17 +44,41 @@ const BookUploads = () => {
       name: '',
       author: '',
       category: '',
+      coverPicture: null,
     });
   };
 
-  const handleApply = () => {
-    // You can process bookDetails here, e.g., send to an API
-    alert(`Book Added:
-      Name: ${bookDetails.name}
-      Author: ${bookDetails.author}
-      Category: ${bookDetails.category}`);
-    closeDetailsPopup();
+  const handleFileChange = (e) => {
+    setBookDetails({ ...bookDetails, coverPicture: e.target.files[0] });
   };
+const handleApply = async () => {
+  try {
+    const formData = new FormData();
+    formData.append('name', bookDetails.name);
+    formData.append('author', bookDetails.author);
+    formData.append('category', bookDetails.category);
+    if (bookDetails.coverPicture) {
+      formData.append('coverPicture', bookDetails.coverPicture);
+    }
+
+    // Retrieve the token from local storage or context
+    const token = localStorage.getItem('token'); // or wherever you store your token
+
+    const response = await axios.post('http://localhost:8000/api/books/add', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${token}`, // Add token to Authorization header
+      },
+    });
+
+    alert(`Book Added:\nName: ${bookDetails.name}\nAuthor: ${bookDetails.author}\nCategory: ${bookDetails.category}`);
+    closeDetailsPopup();
+  } catch (error) {
+    console.error('Error adding book:', error);
+    alert('An error occurred while adding the book. Please try again.');
+  }
+};
+
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -200,21 +225,45 @@ const BookUploads = () => {
               </div>
 
               {/* Category Input Field Centered Below */}
-
-                {/* Upload Cover Photo Section */}
-                <button
-                  className="flex items-center justify-center mt-8 w-1/2 py-3   rounded-lg shadow-sm transition-all"
-                 
+              <div className="relative w-1/2 mt-8">
+                <input
+                  type="text"
+                  className={`w-full px-4 py-2 border-b-2 border-gray-300 focus:border-blue-500 transition-all focus:outline-none ${
+                    bookDetails.category ? 'border-blue-500' : ''
+                  }`}
+                  placeholder="Category"
+                  value={bookDetails.category}
+                  onChange={(e) => setBookDetails({ ...bookDetails, category: e.target.value })}
+                />
+                {/* Floating Label */}
+                <label
+                  className={`absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 transition-all ${
+                    bookDetails.category ? 'text-xs -translate-y-6' : ''
+                  }`}
                 >
-                  <AiOutlineCloudUpload size={24} className="text-blue-600 mr-2" />
-                  <span className="text-sm font-semibold text-blue-700">Upload Cover Photo</span>
-                </button>
-                <button
-                      className="bg-blue-500 text-white py-2 px-20 rounded-lg hover:bg-blue-600 transition"
-                    
-                    >
-                      Apply
-                    </button>
+                  Category
+                </label>
+              </div>
+
+              {/* Upload Cover Photo Section */}
+              <input
+                type="file"
+                accept="image/*"
+                className="mt-8"
+                onChange={handleFileChange}
+              />
+              <button
+                className="flex items-center justify-center mt-8 w-1/2 py-3 rounded-lg shadow-sm transition-all"
+              >
+                <AiOutlineCloudUpload size={24} className="text-blue-600 mr-2" />
+                <span className="text-sm font-semibold text-blue-700">Upload Cover Photo</span>
+              </button>
+              <button
+                className="bg-blue-500 text-white py-2 px-20 rounded-lg hover:bg-blue-600 transition"
+                onClick={handleApply}
+              >
+                Apply
+              </button>
             </div>
 
             {/* Details Pop-up for Adding Book */}
