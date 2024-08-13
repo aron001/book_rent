@@ -4,7 +4,7 @@ import axios from 'axios';
 // Action for login
 export const loginUser = (email, password) => async (dispatch) => {
   try {
-    const response = await axios.post('http://localhost:8000/api/users/login', {
+    const response = await axios.post('https://book-rent-api-c5nw.onrender.com/api/users/login', {
       email,
       password,
     });
@@ -32,7 +32,7 @@ export const loginUser = (email, password) => async (dispatch) => {
 // Action for signup
 export const signupUser = (email, phone, password, role) => async (dispatch) => {
   try {
-    await axios.post('http://localhost:8000/api/users/register', {
+    await axios.post('https://book-rent-api-c5nw.onrender.com/api/users/register', {
       email,
       phone,
       password,

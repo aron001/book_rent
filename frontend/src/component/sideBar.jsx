@@ -46,7 +46,7 @@ const Sidebar = () => {
           </button>
           
           
-          <Link to="/other">
+          <Link to="/">
 
           <button className="flex items-center py-2 px-4 rounded-lg hover:bg-blue-700 transition">
             <AiFillSetting size={15} className="mr-2" /> Settings
@@ -55,7 +55,7 @@ const Sidebar = () => {
           <button className="flex items-center py-2 px-4 rounded-lg hover:bg-blue-700 transition">
             <AiFillBell size={15} className="mr-2" /> Notifications
           </button>
-          <Link to="/login">
+          <Link to="/uploads">
 
           <button className="flex items-center py-2 px-4 rounded-lg hover:bg-blue-700 transition">
             <AiOutlineLogin size={15} className="mr-2" /> Log in as Bookowner

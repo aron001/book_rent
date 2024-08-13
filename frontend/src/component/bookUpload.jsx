@@ -11,6 +11,7 @@ import {
   AiOutlineDown,
   AiOutlineCloudUpload,
 } from 'react-icons/ai';
+import { Link } from 'react-router-dom';
 
 const BookUploads = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -64,7 +65,7 @@ const handleApply = async () => {
     // Retrieve the token from local storage or context
     const token = localStorage.getItem('token'); // or wherever you store your token
 
-    const response = await axios.post('http://localhost:8000/api/books/add', formData, {
+    const response = await axios.post('https://book-rent-api-c5nw.onrender.com/api/books/add', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
         'Authorization': `Bearer ${token}`, // Add token to Authorization header
@@ -85,27 +86,35 @@ const handleApply = async () => {
       {/* Sidebar Menu */}
       <div className="w-64 bg-blue-950 text-white flex flex-col p-6 rounded-r-lg mb-4 ml-4 mt-6 justify-between">
         <nav className="flex flex-col space-y-2">
+          <Link to="/admin">
           <button className="flex items-center py-2 px-4 rounded-lg hover:bg-blue-700 transition">
             <AiFillHome size={15} className="mr-2" /> Dashboard
           </button>
+          </Link>
           <button className="flex items-center py-2 px-4 rounded-lg hover:bg-blue-700 transition">
             <AiOutlineAppstore size={15} className="mr-2" /> Other
           </button>
+          <Link to='/owners'>
           <button className="flex items-center py-2 px-4 rounded-lg hover:bg-blue-700 transition">
             <AiFillBook size={15} className="mr-2" /> Owners
           </button>
+          </Link>
+          <Link to="/books">
           <button className="flex items-center py-2 px-4 rounded-lg hover:bg-blue-700 transition">
             <AiFillBook size={15} className="mr-2" /> Book
           </button>
+          </Link>
           <button className="flex items-center py-2 px-4 rounded-lg hover:bg-blue-700 transition">
             <AiFillSetting size={15} className="mr-2" /> Settings
           </button>
           <button className="flex items-center py-2 px-4 rounded-lg hover:bg-blue-700 transition">
             <AiFillBell size={15} className="mr-2" /> Notifications
           </button>
+          <Link to='/uploads'>
           <button className="flex items-center py-2 px-4 rounded-lg hover:bg-blue-700 transition">
             <AiOutlineLogin size={15} className="mr-2" /> Log in as Bookowner
           </button>
+          </Link>
         </nav>
         <div className="flex items-center py-2 px-4 rounded-lg hover:bg-blue-700 transition">
           <AiOutlineLogout size={15} className="mr-2" /> Logout
