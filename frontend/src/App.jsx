@@ -20,19 +20,33 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
-        {/* Private Routes */}
-        {token ? (
-          <>
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/books" element={<Book />} />
-            <Route path="/owners" element={<Owners />} />
-            <Route path="/uploads" element={<BookUploads />} />
-            <Route path="/" element={<AdminDashboard />} />
-          </>
-        ) : (
-          // Redirect to login if the user is not logged in
-          <Route path="*" element={<Navigate to="/login" />} />
-        )}
+        {/* Protected Routes */}
+        <Route
+          path="/admin"
+          element={token ? <AdminDashboard /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/books"
+          element={token ? <Book /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/owners"
+          element={token ? <Owners /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/uploads"
+          element={token ? <BookUploads /> : <Navigate to="/login" />}
+        />
+
+        {/* Redirect authenticated users away from login and signup pages */}
+        <Route
+          path="/"
+          element={token ? <Navigate to="/admin" /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="*"
+          element={token ? <Navigate to="/admin" /> : <Navigate to="/login" />}
+        />
       </Routes>
     </Router>
   );
