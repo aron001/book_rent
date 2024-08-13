@@ -63,7 +63,7 @@ const Sidebar = () => {
           </Link>
 
         </nav>
-        <Link to="/login">
+        <Link to="/signup">
 
         <div className="flex items-center py-2 px-4 rounded-lg hover:bg-blue-700 transition">
           <AiOutlineLogout size={15} className="mr-2" /> Logout
