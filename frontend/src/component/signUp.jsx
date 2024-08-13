@@ -1,6 +1,6 @@
-// src/component/Signup.js
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { signupUser } from '../store/actions/authActions';
 import { Link } from 'react-router-dom';
 
@@ -13,6 +13,7 @@ const Signup = () => {
   const [error, setError] = useState(null); // Add local state for error handling
   const dispatch = useDispatch();
   const signupError = useSelector(state => state.auth.error);
+  const navigate = useNavigate(); // Hook for navigation
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -30,8 +31,15 @@ const Signup = () => {
     // Clear previous error
     setError(null);
 
-    // Dispatch signup action
-    dispatch(signupUser(email, phone, password, 'BookOwner'));
+    try {
+      // Dispatch signup action
+      await dispatch(signupUser(email, phone, password, 'BookOwner'));
+
+      // Redirect to home page or another page after successful signup
+      navigate('/'); // Adjust the path as needed
+    } catch (err) {
+      setError('Signup failed. Please try again.');
+    }
   };
 
   // Show signup errors from Redux store
@@ -122,9 +130,7 @@ const Signup = () => {
             </button>
             <div className="text-center mt-4">
               <p className="text-sm text-gray-600">Already have an account?</p>
-              <Link> Login</Link>
-               
-              
+              <Link to="/login" className="text-blue-500">Login</Link>
             </div>
           </form>
         </div>
