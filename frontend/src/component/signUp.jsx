@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { signupUser } from '../store/actions/authActions';
+import { Link } from 'react-router-dom';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
@@ -121,12 +122,9 @@ const Signup = () => {
             </button>
             <div className="text-center mt-4">
               <p className="text-sm text-gray-600">Already have an account?</p>
-              <a 
-                href="/login" 
-                className="text-blue-500 hover:underline"
-              >
-                Login
-              </a>
+              <Link> Login</Link>
+               
+              
             </div>
           </form>
         </div>

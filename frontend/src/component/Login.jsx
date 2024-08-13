@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../store/actions/authActions';
-
+import { Link } from 'react-router-dom';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -73,12 +73,9 @@ const Login = () => {
             </button>
             <div className="text-center mt-4">
               <p className="text-sm text-gray-600">Don't have an account?</p>
-              <a 
-                href="/signup" 
-                className="text-blue-500 hover:underline"
-              >
+              <Link to="/signup">
                 Sign Up
-              </a>
+                </Link>
             </div>
           </form>
         </div>
